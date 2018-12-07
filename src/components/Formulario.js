@@ -25,7 +25,7 @@ class FormularioGasto extends Component{
     this.props.agregarGasto(gasto);
 
     // Resetear el formulario (opcional)
-    e.currentTarget.reset();
+    //e.currentTarget.reset();
   }
 
     render(){
@@ -41,7 +41,6 @@ class FormularioGasto extends Component{
                     <label>Cantidad</label>
                     <input ref={this.cantidadGasto} className="u-full-width" type="text" placeholder="Ej. 300" />
                 </div>
-
                     <input className="button-primary u-full-width" type="submit" value="Agregar" />
                 </form>
         )

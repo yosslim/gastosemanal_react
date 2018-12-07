@@ -15,6 +15,8 @@ class App extends Component {
   agregarGasto = gasto => {
   // Tomar una copia del state actual
   const gastos = {...this.state.gastos};
+
+  console.log('Se agrego el gasto' + gasto);
   console.log(gastos);
   // Agregar al gasto el objeto del state
 
