@@ -2,25 +2,85 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import Header from './Header';
 import Formulario from './Formulario';
+import Listado from './Listado';
+import ControlPresupuesto from './ControlPresupuesto';
+
+import {validarPresupuesto} from '../helper';
 class App extends Component {
 
   state = {
-    presupuestos:'',
+    presupuesto:'',
     restante:'',
     gastos: {}
+  }
+
+  //Aqui podemos hacer consultas a una API
+  //para cargar todos los datos
+  //Se recomienda no cargar mucho el componentDidMount, llamar una func
+  componentDidMount(){
+   this.obtenerPresupuesto();
+  }
+
+  obtenerPresupuesto = () =>{
+    let presupuesto = prompt('Cual es el presupuesto?');
+    let resultado = validarPresupuesto(presupuesto);
+
+    if(resultado){
+      this.setState({
+        presupuesto: presupuesto,
+        restante: presupuesto
+      })
+    }
+    else{
+      this.obtenerPresupuesto();
+
+    }
+
   }
 
   // Agregar un nuevo gasto al state
 
   agregarGasto = gasto => {
-  // Tomar una copia del state actual
+  // Tomar una copia del state actual para no perder los anteriores
   const gastos = {...this.state.gastos};
 
   console.log('Se agrego el gasto' + gasto);
   console.log(gastos);
   // Agregar al gasto el objeto del state
+  gastos[`gasto${Date.now()}`] = gasto;
 
+  this.restarPresupuesto(gasto.cantidadGasto);
+  
   // Ponerlo en state
+  this.setState({
+    //si el nombre del estado se llama igual que la 
+    //variable se podemos poner una vez:
+    gastos
+
+    // ò
+    //gastos=gastos
+  })
+  }
+
+
+  //Restar el presupuesto cuando un gaso se crea
+
+  restarPresupuesto = cantidad =>{
+    //leer el gasto
+    let restar = Number(cantidad);
+
+    //Tomar una copia del state actual
+    let restante = this.state.restante;
+
+    //lo resamos
+    restante -= restar;
+
+    restante = String(restante);
+
+    //agregamos el nuevo state
+    this.setState({
+      restante
+    })
   }
 
   render() {
@@ -37,7 +97,13 @@ class App extends Component {
             />
           </div>
           <div className="one-half column">
-          
+          <Listado
+            gastos={this.state.gastos}
+          /> 
+          <ControlPresupuesto
+            presupuesto={this.state.presupuesto}
+            restante={this.state.restante}
+          />         
           </div>
         </div>
       </div>
